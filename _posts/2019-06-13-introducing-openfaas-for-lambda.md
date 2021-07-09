@@ -87,7 +87,7 @@ as a Pod along with the existing OpenFaaS core serviecs. I then used the [AWS SD
 
 ### Deploy a function
 
-OpenFaaS functions are built into immutable Docker or OCI-format images, which are then stored in a registry such as the Amazon Container Registry (ACR). The first challenge I had was how to transform layers in my Docker image into an AWS Lambda package.
+OpenFaaS functions are built into immutable Docker or OCI-format images, which are then stored in a registry such as the Amazon Elastic Container Registry (ECR). The first challenge I had was how to transform layers in my Docker image into an AWS Lambda package.
 
 This is how I decided to approach the problem. There is also potential to use Lambda layers in the future, but for now the provider creates a single layer or archive per function.
 
