@@ -146,6 +146,12 @@ $ cd deployment
 $ kubectl apply -f rbac.yaml,service.yaml,deployment.yaml
 ```
 
+* Label the default namespace to enable the webhook
+
+```sh
+$ kubectl label namespaces default admission-webhook-example=enabled
+```
+
 ### 5. Build and Deploy OpenFaaS Function (Optional)
 
 * Pull the [golang-middleware](https://github.com/openfaas-incubator/golang-http-template) template from [OpenFaaS Official Template Store](https://github.com/openfaas/store)
