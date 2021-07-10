@@ -78,7 +78,7 @@ To get more detail please refer to this [link](https://blog.alexellis.io/introdu
 
 Once we have arkade, we can create a cluster and install ArgoCD. If you prefer, you can also manually download all the tools required, and find the instructions for ArgoCD's helm chart.
 
- * [arkade](https://get-arkade.dev) (v0.7.10) Kubernetes marketplace
+ * [arkade](https://get-arkade.dev) (v0.7.13) Kubernetes marketplace
 
   ```bash
   # Run with or without sudo
@@ -141,8 +141,39 @@ arkade is not only for the CLI tooling, it also helps you to get started to inst
 hopefully arkade also supports installing ArgoCD.
 
 ```bash
-$ kubectl create namespace argocd
 $ arkade install argocd
+Using Kubeconfig: /Users/batuhan.apaydin/.kube/config
+Node architecture: "amd64"
+=======================================================================
+= ArgoCD has been installed                                           =
+=======================================================================
+
+
+# Get the ArgoCD CLI
+arkade install argocd
+
+# Port-forward the ArgoCD API server
+kubectl port-forward svc/argocd-server -n argocd 8443:443 &
+
+# Get the password
+PASS=$(kubectl get secret argocd-initial-admin-secret \
+  -n argocd \
+  -o jsonpath="{.data.password}" | base64 -d)
+echo $PASS
+
+# Or log in:
+argocd login --name local 127.0.0.1:8443 --insecure \
+ --username admin \
+ --password $PASS
+
+# Open the UI:
+https://127.0.0.1:8443
+
+# Get started with ArgoCD at
+# https://argoproj.github.io/argo-cd/#quick-start
+
+Thanks for using arkade!
+
 ```
 
 Verify if everything is working properly in _argocd_ namespace before moving onto the next step.
@@ -168,31 +199,45 @@ First, we need to authenticate to ArgoCD server.Argo CD v1.9. Later the initial 
 auto-generated and stored as clear text in the field password in a secret named argocd-initial-admin-secret in your Argo
 CD installation namespace.
 
-You can simply retrieve this password using kubectl:
-
-```bash
-$ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo
-SyudUgAtDobmgSjM
-```
-
 Because ArgoCD Server is running on a Kubernetes, we should do port-forwarding first in order to access the server, it
 can be achieved by the following command easily:
 
 ```bash
-$ kubectl port-forward svc/argocd-server -n argocd 8080:443
-Forwarding from 127.0.0.1:8080 -> 8080
-Forwarding from [::1]:8080 -> 8080
+# Port-forward the ArgoCD API server
+$ kubectl port-forward svc/argocd-server -n argocd 8443:443 &
+Forwarding from 127.0.0.1:8443 -> 443
+Forwarding from [::1]:8443 -> 443
+```
+
+You can simply retrieve this password using kubectl:
+
+```bash
+# Get the password
+$ PASS=$(kubectl get secret argocd-initial-admin-secret \
+  -n argocd \
+  -o jsonpath="{.data.password}" | base64 -d)
+echo $PASS
 ```
 
 After that, by using the username _admin_ and the password from above, lets log into ArgoCD:
 
 ```bash
-$ argocd login --name local localhost:8080
+# log in:
+$ argocd login --name local 127.0.0.1:8443 --insecure \
+ --username admin \
+ --password $PASS
 WARNING: server certificate had error: x509: certificate signed by unknown authority. Proceed insecurely (y/n)? y
 Username: admin
 Password:
 'admin:login' logged in successfully
 Context 'local' updated
+
+
+# Open the UI:
+$ open https://127.0.0.1:8443
+
+# Get started with ArgoCD at
+# https://argoproj.github.io/argo-cd/#quick-start
 ```
 
 To get more detail about login process, please refer to
