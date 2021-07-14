@@ -59,7 +59,7 @@ Here's an example of what we'll configure first with a basic dataset, and a quer
 
 First of all, you'll need to deploy OpenFaaS to a Kubernetes cluster, you can follow [our deployment instructions here](https://docs.openfaas.com/deployment/kubernetes/). You can use a local cluster like KinD or a managed Kubernetes engine.
 
-I was pleasantly surprised to see a console for Cassandra built into the UI, where you can run queries and create collections.
+I was pleasantly surprised to see a console for Cassandra built into the UI, where you can run queries and create tables. Why is that useful? It means I didn't have to install and configure a CLI on my local computer to test things out.
 
 ![CQL console](/images/2021-07-astra/cql.jpg)
 
@@ -293,7 +293,7 @@ await client.batch(queries, { prepare: true });
 console.log('Data updated on cluster');
 ```
 
-You can find plenty of examples of how to use the SDK in the [npm module's documentation](https://docs.datastax.com/en/developer/nodejs-driver/4.6/).
+You can find plenty of examples of how to use the driver in the [npm module's documentation](https://docs.datastax.com/en/developer/nodejs-driver/4.6/).
 
 ## Using the Astra API
 
